@@ -1,10 +1,13 @@
-import { Controller, Get } from '@nestjs/common';
-import { sendEmail } from '../../helpers/email-helper/email-helpers';
+import { Body, Controller, Post } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { CreateUserDto } from '../../dto/auth/createUsers.dto';
 
 @Controller('auth')
 export class AuthController {
-  @Get()
-  signUpAdmin() {
-    return sendEmail('micvillacarlos@gmail.com', '8999');
+  constructor(private authService: AuthService) {}
+
+  @Post('/create-user')
+  createUser(@Body() createUserDto: CreateUserDto) {
+    return this.authService.createUsers(createUserDto);
   }
 }

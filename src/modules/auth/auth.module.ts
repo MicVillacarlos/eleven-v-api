@@ -18,5 +18,6 @@ import { projectConfig } from '../../config/config';
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
   ],
   providers: [AuthService],
+  exports: [AuthService],
 })
 export class AuthModule {}
