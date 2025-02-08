@@ -1,12 +1,18 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../../schemas/users.schema';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { generateTemporaryPassword } from '../../utils/auth.utils';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto } from '../../dto/auth/createUsers.dto';
+import { CreateUserDto } from '../../dto/auth/createUser.dto';
 import { sendEmail } from '../../helpers/email-helper/email-helpers';
+import { LoginUserDto } from '../../dto/auth/loginUser.dto';
 @Injectable()
 export class AuthService {
   constructor(
@@ -15,7 +21,9 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async createUsers(data: CreateUserDto) {
+  async createUser(
+    data: CreateUserDto,
+  ): Promise<{ email: string; token: string }> {
     const {
       first_name,
       last_name,
@@ -59,7 +67,36 @@ export class AuthService {
 
       const token = this.jwtService.sign({ _id: user._id });
 
-      return { user, token };
+      return { email: user.email, token };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async loginUser(
+    data: LoginUserDto,
+  ): Promise<{ email: string; token: string }> {
+    const { email, password } = data;
+    try {
+      const user = await this.userModel.findOne({
+        email,
+      });
+
+      if (!user) {
+        throw new UnauthorizedException('Invalid email or password.');
+      }
+      const isPasswordMatched = await bcrypt.compare(password, user.password);
+
+      if (!isPasswordMatched) {
+        throw new UnauthorizedException('Invalid email or password.');
+      }
+
+      const token = this.jwtService.sign(
+        { _id: user._id },
+        { expiresIn: '1d' },
+      );
+
+      return { email: user.email, token };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
