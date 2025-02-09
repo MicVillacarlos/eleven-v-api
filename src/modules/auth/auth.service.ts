@@ -11,8 +11,9 @@ import * as bcrypt from 'bcrypt';
 import { generateTemporaryPassword } from '../../utils/auth.utils';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '../../dto/auth/createUser.dto';
-import { sendEmail } from '../../helpers/email-helper/email-helpers';
+import { sendEmail } from '../../helpers/email.helper/email.helpers';
 import { LoginUserDto } from '../../dto/auth/loginUser.dto';
+import { projectConfig } from '../../config/config';
 @Injectable()
 export class AuthService {
   constructor(
@@ -93,7 +94,7 @@ export class AuthService {
 
       const token = this.jwtService.sign(
         { _id: user._id },
-        { expiresIn: '1d' },
+        { expiresIn: projectConfig.jwtExpire },
       );
 
       return { email: user.email, token };
