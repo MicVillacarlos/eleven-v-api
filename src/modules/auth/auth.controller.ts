@@ -8,12 +8,12 @@ import { JwtAuthGuard } from '../../helpers/auth.guard.helper/auth.guard.helper'
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post('/create-user')
   createUser(@Body() createUserDto: CreateUserDto) {
     return this.authService.createUser(createUserDto);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('/login')
   loginUser(@Body() loginUserDto: LoginUserDto) {
     return this.authService.loginUser(loginUserDto);
