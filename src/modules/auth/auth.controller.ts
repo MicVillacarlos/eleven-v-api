@@ -9,19 +9,19 @@ import { UpdatePasswordDto } from '../../dto/auth/updatePassword.dto';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('/login')
+  @Post('/admin/login')
   loginUser(@Body() loginUserDto: LoginUserDto) {
     return this.authService.loginUser(loginUserDto);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('/create-user')
+  @Post('/admin/create-user')
   createUser(@Body() createUserDto: CreateUserDto) {
     return this.authService.createUser(createUserDto);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Put('/update-password')
+  @Put('/admin/update-password')
   updateAdminPassword(@Body() updatePasswordDto: UpdatePasswordDto) {
     return this.authService.updateAdminPassword(updatePasswordDto);
   }

@@ -60,6 +60,7 @@ export class AuthService {
         occupation,
         company_or_school,
         number_of_room_occupants,
+        user_type: 'admin',
       });
 
       //send temporary password to email ----- START
