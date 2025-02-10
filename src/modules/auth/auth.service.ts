@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -11,8 +12,10 @@ import * as bcrypt from 'bcrypt';
 import { generateTemporaryPassword } from '../../utils/auth.utils';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '../../dto/auth/createUser.dto';
-import { sendEmail } from '../../helpers/email-helper/email-helpers';
+import { sendEmail } from '../../helpers/email.helper/email.helpers';
 import { LoginUserDto } from '../../dto/auth/loginUser.dto';
+import { projectConfig } from '../../config/config';
+import { UpdatePasswordDto } from '../../dto/auth/updatePassword.dto';
 @Injectable()
 export class AuthService {
   constructor(
@@ -93,12 +96,52 @@ export class AuthService {
 
       const token = this.jwtService.sign(
         { _id: user._id },
-        { expiresIn: '1d' },
+        { expiresIn: projectConfig.jwtExpire },
       );
 
       return { email: user.email, token };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async updateAdminPassword(
+    data: UpdatePasswordDto,
+  ): Promise<{ success: boolean; message: string }> {
+    const { id, newPassword, confirmNewPassword, oldPassword } = data;
+
+    try {
+      const user = await this.userModel.findOne({ _id: id });
+
+      if (!user) {
+        throw new BadRequestException('User not found.');
+      }
+
+      const isOldPasswordMatched = await bcrypt.compare(
+        oldPassword,
+        user.password,
+      );
+
+      if (!isOldPasswordMatched) {
+        throw new BadRequestException('Old password is incorrect.');
+      }
+
+      if (newPassword !== confirmNewPassword) {
+        throw new BadRequestException(
+          'New password and confirm password must match.',
+        );
+      }
+
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      await this.userModel.findByIdAndUpdate(id, { password: hashedPassword });
+
+      return { success: true, message: 'Password successfully updated.' };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error.message || 'An error occurred while updating the password.',
+      };
     }
   }
 }
