@@ -107,9 +107,10 @@ export class AuthService {
   }
 
   async updateAdminPassword(
+    id: string,
     data: UpdatePasswordDto,
   ): Promise<{ success: boolean; message: string }> {
-    const { id, newPassword, confirmNewPassword, oldPassword } = data;
+    const { newPassword, confirmNewPassword, oldPassword } = data;
 
     try {
       const user = await this.userModel.findOne({ _id: id });
