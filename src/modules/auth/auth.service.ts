@@ -146,4 +146,15 @@ export class AuthService {
       };
     }
   }
+
+  async validateToken(
+    token: string,
+  ): Promise<{ success: boolean; message: string }> {
+    try {
+      this.jwtService.verify(token);
+      return { success: true, message: 'Token is valid.' };
+    } catch (error) {
+      throw new UnauthorizedException('Invalid or expired token.');
+    }
+  }
 }

@@ -1,4 +1,12 @@
-import { Body, Controller, Param, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../../dto/auth/createUser.dto';
 import { LoginUserDto } from '../../dto/auth/loginUser.dto';
@@ -27,5 +35,10 @@ export class AuthController {
     @Body() updatePasswordDto: UpdatePasswordDto,
   ) {
     return this.authService.updateAdminPassword(id, updatePasswordDto);
+  }
+
+  @Get('/validate-token/:token')
+  validateToken(@Param('token') token: string) {
+    return this.authService.validateToken(token);
   }
 }
