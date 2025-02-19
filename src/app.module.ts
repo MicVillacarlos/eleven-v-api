@@ -1,8 +1,9 @@
-import { Module, Logger } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AuthController } from './modules/auth/auth.controller';
 import { projectConfig } from './config/config';
+import { AuthController } from './modules/auth/auth.controller';
 import { AuthModule } from './modules/auth/auth.module';
+import { RoomModule } from './modules/room/room/room.module';
 import { UsersModule } from './modules/users/users/users.module';
 
 const logger = new Logger('MongoDB');
@@ -29,6 +30,7 @@ const logger = new Logger('MongoDB');
     }),
     AuthModule,
     UsersModule,
+    RoomModule,
   ],
   controllers: [AuthController],
 })

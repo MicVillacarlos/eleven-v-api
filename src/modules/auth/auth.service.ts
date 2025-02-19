@@ -19,7 +19,7 @@ import { UpdatePasswordDto } from '../../dto/auth/updatePassword.dto';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name)
+    @InjectModel('User')
     private userModel: Model<User>,
     private jwtService: JwtService,
   ) {}

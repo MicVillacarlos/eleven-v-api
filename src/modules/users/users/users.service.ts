@@ -8,7 +8,7 @@ import { UserProfile } from '../../../types/auth/user.type';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(User.name)
+    @InjectModel('User')
     private userModel: Model<User>,
   ) {}
 
