@@ -1,9 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConsoleLogger } from '@nestjs/common';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
+import { projectConfig } from './config/config';
 
 async function bootstrap() {
   const logger = new ConsoleLogger('Eleven-V');
@@ -12,7 +10,15 @@ async function bootstrap() {
     logger: logger,
   });
 
-  await app.listen(process.env.PORT);
-  logger.log(`** 🚀 Application is running on port ${process.env.PORT} 🚀 **`);
+  app.enableCors({
+    origin: projectConfig.fe_url,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
+
+  await app.listen(projectConfig.port);
+  logger.log(
+    `** 🚀 Application is running on port ${projectConfig.port} 🚀 **`,
+  );
 }
 bootstrap();

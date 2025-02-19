@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthController } from './modules/auth/auth.controller';
 import { projectConfig } from './config/config';
+import { AuthModule } from './modules/auth/auth.module';
 
 const logger = new Logger('MongoDB');
 
@@ -27,6 +28,7 @@ const logger = new Logger('MongoDB');
         },
       }),
     }),
+    AuthModule,
   ],
   controllers: [AppController, AuthController],
   providers: [AppService],
