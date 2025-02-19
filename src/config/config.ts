@@ -3,6 +3,7 @@ dotenv.config();
 
 export const projectConfig = {
   port: process.env.PORT,
+  fe_url: process.env.FE_URL,
   mongoDbConnect: process.env.MONGO_DB_CONNECT,
   mongoDbDatabaseName: process.env.MONGO_DB_DATABASE_NAME,
   mailEmail: process.env.EMAIL,

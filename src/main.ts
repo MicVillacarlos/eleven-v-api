@@ -10,7 +10,15 @@ async function bootstrap() {
     logger: logger,
   });
 
+  app.enableCors({
+    origin: projectConfig.fe_url,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
+
   await app.listen(projectConfig.port);
-  logger.log(`** 🚀 Application is running on port ${process.env.PORT} 🚀 **`);
+  logger.log(
+    `** 🚀 Application is running on port ${projectConfig.port} 🚀 **`,
+  );
 }
 bootstrap();
