@@ -10,7 +10,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class CreateUserDto {
+export class CreateAdminDto {
   @IsString()
   readonly first_name: string;
 

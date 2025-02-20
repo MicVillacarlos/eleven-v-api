@@ -11,7 +11,7 @@ import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { generateTemporaryPassword } from '../../utils/auth.utils';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto } from '../../dto/auth/createUser.dto';
+import { CreateAdminDto } from '../../dto/auth/createAdmin.dto';
 import { sendEmail } from '../../helpers/email.helper/email.helpers';
 import { LoginUserDto } from '../../dto/auth/loginUser.dto';
 import { projectConfig } from '../../config/config';
@@ -19,13 +19,13 @@ import { UpdatePasswordDto } from '../../dto/auth/updatePassword.dto';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name)
+    @InjectModel('User')
     private userModel: Model<User>,
     private jwtService: JwtService,
   ) {}
 
-  async createUser(
-    data: CreateUserDto,
+  async createAdmin(
+    data: CreateAdminDto,
   ): Promise<{ email: string; token: string }> {
     const {
       first_name,

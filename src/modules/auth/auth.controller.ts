@@ -8,7 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from '../../dto/auth/createUser.dto';
+import { CreateAdminDto } from '../../dto/auth/createAdmin.dto';
 import { LoginUserDto } from '../../dto/auth/loginUser.dto';
 import { JwtAuthGuard } from '../../helpers/auth.guard.helper/auth.guard.helper';
 import { UpdatePasswordDto } from '../../dto/auth/updatePassword.dto';
@@ -23,9 +23,9 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('/create-user')
-  createUser(@Body() createUserDto: CreateUserDto) {
-    return this.authService.createUser(createUserDto);
+  @Post('/create-admin')
+  createUser(@Body() createUserDto: CreateAdminDto) {
+    return this.authService.createAdmin(createUserDto);
   }
 
   @UseGuards(JwtAuthGuard)

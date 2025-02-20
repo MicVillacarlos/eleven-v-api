@@ -1,10 +1,10 @@
-import { Module, Logger } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AuthController } from './modules/auth/auth.controller';
 import { projectConfig } from './config/config';
+import { AuthController } from './modules/auth/auth.controller';
 import { AuthModule } from './modules/auth/auth.module';
+import { RoomModule } from './modules/room/room/room.module';
+import { UsersModule } from './modules/users/users/users.module';
 
 const logger = new Logger('MongoDB');
 
@@ -29,8 +29,9 @@ const logger = new Logger('MongoDB');
       }),
     }),
     AuthModule,
+    UsersModule,
+    RoomModule,
   ],
-  controllers: [AppController, AuthController],
-  providers: [AppService],
+  controllers: [AuthController],
 })
 export class AppModule {}

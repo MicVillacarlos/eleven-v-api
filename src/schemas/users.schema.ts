@@ -57,8 +57,8 @@ export class User {
     price: number;
   };
 
-  @Prop()
-  user_type: string;
+  @Prop({ required: true })
+  user_type: 'admin' | 'lodger';
 
   @Prop({ default: false })
   is_verified: boolean;
